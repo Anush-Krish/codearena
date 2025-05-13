@@ -1,6 +1,6 @@
 const User = require('../models/user.model');
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs');
+const jwtUtils = require('../utils/jwt.utils');
 
 const register = async ({firstName, lastName, email, password}) => {
     const existing = await User.findOne({email});
@@ -12,7 +12,7 @@ const register = async ({firstName, lastName, email, password}) => {
     const user = new User({firstName, lastName, email, password: hashPassword});
     const savedUser = await user.save();
 
-    const token = generateToken(savedUser);
+    const token = jwtUtils.generateToken(savedUser);
 
     return {
         token,
@@ -25,13 +25,6 @@ const register = async ({firstName, lastName, email, password}) => {
     };
 };
 
-const generateToken = (user) => {
-    return jwt.sign(
-        {id: user._id, email: user.email},
-        process.env.SECRET_KEY,
-        {expiresIn: '1d'}
-    );
-};
 
 const login = async ({email, password}) => {
     const existingUser = await User.findOne({email});
@@ -45,7 +38,7 @@ const login = async ({email, password}) => {
         throw new Error('Invalid email or password');
     }
 
-    const token = generateToken(existingUser);
+    const token = jwtUtils.generateToken(existingUser);
 
     return {
         token,
