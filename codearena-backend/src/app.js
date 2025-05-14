@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
 const dbConnection = require("./config/db");
-const userRoutes = require("../src/routes/user.routes")
+const userRoutes = require("./routes/auth.routes")
+const problemRoute = require("./routes/problem.route")
 
 app.use(express.json());
 
 dbConnection();
 
-app.use('/api/users', userRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/api/problems', problemRoute);
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
