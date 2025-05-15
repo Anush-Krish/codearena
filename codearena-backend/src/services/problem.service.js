@@ -1,7 +1,7 @@
 const Problem = require('../models/problem.model');
 const TestCase = require('../models/testcase.model');
 
-const createProblem = async ({ title, description, tags, difficulty, sampleSol, testCases }) => {
+const createProblem = async ({title, description, tags, difficulty, sampleSol, testCases}) => {
     const problem = new Problem({
         title,
         description,
@@ -25,4 +25,33 @@ const createProblem = async ({ title, description, tags, difficulty, sampleSol, 
 
     return savedProblem;
 };
-module.exports = {createProblem};
+
+
+const fetchAllProblems = async (pagination, query) => {
+    const {page, limit} = pagination;
+    const {difficulty, tags} = query;
+
+    const filter = {};
+    if (difficulty) filter.difficulty = difficulty;
+    if (tags) filter.tags = {$all: tags.split(',')};
+
+    const problems = await Problem.find(filter)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+
+    const total = await Problem.countDocuments(filter);
+
+    return {
+        problems,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+    };
+};
+
+const getProblemById = async (id) => {
+    return await Problem.findById(id).populate('tId');
+};
+
+
+module.exports = {createProblem, fetchAllProblems, getProblemById};
