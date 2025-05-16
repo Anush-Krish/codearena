@@ -1,14 +1,18 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(() => localStorage.getItem('token'));
+    const [token, setToken] = useState(() => Cookies.get('token') || null);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (token) localStorage.setItem('token', token);
-        else localStorage.removeItem('token');
+        if (token) {
+            Cookies.set('token', token, { expires: 7 });
+        } else {
+            Cookies.remove('token');
+        }
     }, [token]);
 
     return (

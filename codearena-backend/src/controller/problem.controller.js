@@ -23,7 +23,10 @@ const getAllProblem = async (req, res) => {
 const getProblem = async (req, res) => {
     try {
         const problem = await problemService.getProblemById(req.params.id);
-        if (!problem) return res.status(404).json({message: 'Problem not found'});
+        if (!problem){
+            console.error('Problem not found.');
+            return res.status(404).json({message: 'Problem not found'});
+        }
         res.status(200).json(problem);
     } catch (err) {
         console.log('Error fetching problems', err.message)
