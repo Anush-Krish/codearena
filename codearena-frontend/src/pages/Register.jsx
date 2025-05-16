@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import axiosInstance from '../api/axiosInstance.jsx';
-import { useNavigate } from 'react-router-dom';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {register} from '../api/AuthApi.jsx';
 
 export default function Register() {
     const [firstName, setFirstName] = useState('');
@@ -13,8 +13,9 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Registering...');
+
         try {
-            await axiosInstance.post('/auth/register', { firstName, lastName, email, password });
+            await register({firstName, lastName, email, password}); // 👈 call API
             console.log('Registration successful');
             navigate('/login');
         } catch (err) {
@@ -22,7 +23,6 @@ export default function Register() {
             setErrorMsg(err.response?.data?.message || 'Registration failed');
         }
     };
-
 
     return (
         <div>
@@ -34,14 +34,12 @@ export default function Register() {
                 <input
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-
                     placeholder="First Name"
                     required
                 />
                 <input
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-
                     placeholder="Last Name"
                     required
                 />
@@ -49,7 +47,6 @@ export default function Register() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
-
                     placeholder="Email"
                     required
                 />
@@ -57,23 +54,15 @@ export default function Register() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     type="password"
-
                     placeholder="Password"
                     required
                 />
 
-                <button
-                    type="submit"
+                <button type="submit">Register</button>
 
-                >
-                    Register
-                </button>
-
-                <p >
+                <p>
                     Already have an account?{' '}
-                    <a href="/pages/Login" >
-                        Login
-                    </a>
+                    <a href="/login">Login</a>
                 </p>
             </form>
         </div>
