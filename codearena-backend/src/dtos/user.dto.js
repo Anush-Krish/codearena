@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const userDto = Joi.object({
+const registerUserDto = Joi.object({
     firstName: Joi.string().trim().required(),
     lastName: Joi.string().trim().required(),
     email: Joi.string().email().required(),
@@ -13,4 +13,4 @@ const loginUserDto = Joi.object({
     password: Joi.string().min(6).trim().required()
 });
 
-module.exports = {registerUserDto: userDto, loginUserDto};
+module.exports = {registerUserDto, loginUserDto};
