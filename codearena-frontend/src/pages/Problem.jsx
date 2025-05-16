@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import axiosInstance from "./api/axiosInstance.jsx";
+import axiosInstance from "../api/axiosInstance.jsx";
 import {Link} from 'react-router-dom';
 
 export default function Problems() {

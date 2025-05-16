@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axiosInstance from "./api/axiosInstance.jsx";
+import axiosInstance from "../api/axiosInstance.jsx";
 
 export default function Solve() {
     const { id } = useParams();
     const [problem, setProblem] = useState(null);
     const [code, setCode] = useState('');
     const [output, setOutput] = useState('');
+    const [submissionResult, setSubmissionResult] = useState(null);
 
     useEffect(() => {
         axiosInstance.get(`/problems/${id}`).then(res => setProblem(res.data));
@@ -23,10 +24,12 @@ export default function Solve() {
 
     const submit = async () => {
         try {
-            await axiosInstance.post('/problems/submit', { code, language: 'cpp', problemId: id });
+            const res = await axiosInstance.post('/problems/submit', { code, language: 'cpp', problemId: id });
             alert('Submission sent');
+            setSubmissionResult(res.data.result);
         } catch {
             alert('Failed to submit');
+            setSubmissionResult(null);
         }
     };
 
@@ -42,7 +45,7 @@ export default function Solve() {
                 margin: 'auto',
             }}
         >
-            {/* Problem Details */}
+
             <div
                 style={{
                     flex: '1 1 40%',
@@ -67,8 +70,8 @@ export default function Solve() {
                                 overflowX: 'auto',
                             }}
                         >
-              {problem.sampleSol[0].Input}
-            </pre>
+                            {problem.sampleSol[0].Input}
+                        </pre>
 
                         <h3>Sample Output:</h3>
                         <pre
@@ -79,29 +82,29 @@ export default function Solve() {
                                 overflowX: 'auto',
                             }}
                         >
-              {problem.sampleSol[0].Output}
-            </pre>
+                            {problem.sampleSol[0].Output}
+                        </pre>
                     </div>
                 )}
             </div>
 
-            {/* Code Editor + Output */}
+
             <div style={{ flex: '1 1 60%' }}>
-        <textarea
-            value={code}
-            onChange={e => setCode(e.target.value)}
-            placeholder="// Write your C++ code here"
-            style={{
-                width: '100%',
-                height: '300px',
-                fontFamily: 'monospace',
-                fontSize: '14px',
-                padding: '10px',
-                borderRadius: '6px',
-                border: '1px solid #ccc',
-                resize: 'vertical',
-            }}
-        />
+                <textarea
+                    value={code}
+                    onChange={e => setCode(e.target.value)}
+                    placeholder="// Write your C++ code here"
+                    style={{
+                        width: '100%',
+                        height: '300px',
+                        fontFamily: 'monospace',
+                        fontSize: '14px',
+                        padding: '10px',
+                        borderRadius: '6px',
+                        border: '1px solid #ccc',
+                        resize: 'vertical',
+                    }}
+                />
 
                 <div style={{ marginTop: '10px' }}>
                     <button
@@ -134,6 +137,12 @@ export default function Solve() {
                     </button>
                 </div>
 
+                {submissionResult && (
+                    <div style={{ marginTop: '15px', fontWeight: 'bold', color: '#2563eb' }}>
+                        Passed {submissionResult.passedCount} out of {submissionResult.totalTestCases} test cases.
+                    </div>
+                )}
+
                 {output && (
                     <pre
                         style={{
@@ -147,8 +156,8 @@ export default function Solve() {
                             border: '1px solid #ddd',
                         }}
                     >
-            {output}
-          </pre>
+                        {output}
+                    </pre>
                 )}
             </div>
         </div>
