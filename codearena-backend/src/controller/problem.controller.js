@@ -1,4 +1,5 @@
 const problemService = require('../services/problem.service');
+const executorService = require('../services/executor.service');
 
 const create = async (req, res) => {
     try {
@@ -30,5 +31,36 @@ const getProblem = async (req, res) => {
     }
 };
 
+const runCode = async (req, res) => {
+    const {code, input = '', language} = req.body;
 
-module.exports = {create, getAllProblem, getProblem};
+    try {
+        let output;
+        if (language === 'cpp') {
+            output = await executorService.executeCpp(code, input);
+        } else {
+            return res.status(400).json({error: 'Unsupported language'});
+        }
+        res.json({output});
+    } catch (err) {
+        console.error('Failed to execute.', err.toString());
+        res.status(500).json({error: err.toString()});
+    }
+};
+
+const submit = async (req, res) => {
+    const {code, language, problemId} = req.body;
+    const userId = req.user.id;
+
+    try {
+        const result = await executorService.submitSolution({
+            userId, problemId, code, language
+        });
+        res.json({message: 'Submission successful', result});
+    } catch (err) {
+        console.error('Failed to execute and save.', err.toString());
+        res.status(500).json({error: 'Execution failed', detail: err.toString()});
+    }
+};
+
+module.exports = {create, getAllProblem, getProblem, runCode, submit};

@@ -5,7 +5,7 @@ const jwtUtils = require('../utils/jwt.utils');
 const register = async ({firstName, lastName, email, password}) => {
     const existing = await User.findOne({email});
     if (existing) {
-        console.log('Email already in use:', existing);
+        console.error('Email already in use:', existing);
         throw new Error('Email already in use');
     }
     const hashPassword = await bcrypt.hash(password, 10);
@@ -35,6 +35,7 @@ const login = async ({email, password}) => {
 
     const isValidPassword = await bcrypt.compare(password, existingUser.password);
     if (!isValidPassword) {
+        console.error("Invalid Password:", password);
         throw new Error('Invalid email or password');
     }
 
