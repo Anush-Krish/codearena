@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from './pages/Register.jsx';
 import Login from './pages/Login.jsx';
 import Problems from './pages/Problem.jsx';
@@ -19,10 +19,11 @@ export default function App() {
                     <Router>
                         <NavBar />
                         <Routes>
-                            <Route path="/register" element={<Register/>}/>
-                            <Route path="/login" element={<Login/>}/>
-                            <Route path="/problems" element={<Problems/>}/>
-                            <Route path="/solve/:id" element={<Solve/>}/>
+                            <Route path="/" element={<Navigate to="/login" replace />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/problems" element={<Problems />} />
+                            <Route path="/solve/:id" element={<Solve />} />
                         </Routes>
                     </Router>
                 </AuthProvider>
