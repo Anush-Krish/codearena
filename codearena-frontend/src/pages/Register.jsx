@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../api/AuthApi.jsx';
+import { getCookie } from '../utils/cookie.js';
 
 export default function Register() {
     const [firstName, setFirstName] = useState('');
@@ -9,6 +10,11 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = getCookie('token');
+        if (token) navigate('/problems');
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

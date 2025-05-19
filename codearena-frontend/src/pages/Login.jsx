@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { login } from '../api/AuthApi.jsx';
+import {getCookie} from "../utils/cookie.js";
+
 
 const Login = () => {
     const { setToken } = useAuth();
@@ -10,6 +12,18 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    // Check token cookie on mount
+    useEffect(() => {
+        const token = getCookie('token');
+        if (token) {
+            setToken(token);
+            navigate('/problems');
+        } else {
+            setLoading(false);
+        }
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -17,12 +31,15 @@ const Login = () => {
         try {
             const { token } = await login(email, password);
             setToken(token);
+            document.cookie = `token=${token}; path=/; max-age=86400`;
             navigate('/problems');
         } catch (err) {
             setErrorMsg(err.response?.data?.message || 'Login failed');
             console.error('Login failed:', err);
         }
     };
+
+    if (loading) return null; // or a spinner if you want
 
     return (
         <div className="flex min-h-[70vh] items-start justify-center">
