@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx';
-import { login } from '../api/AuthApi.jsx';
+import React, {useState, useEffect} from 'react';
+import {useNavigate, Navigate} from 'react-router-dom';
+import {useAuth} from '../context/AuthContext.jsx';
+import {login} from '../api/AuthApi.jsx';
 import {getCookie} from "../utils/cookie.js";
 
 
 const Login = () => {
-    const { setToken } = useAuth();
+    const {setToken} = useAuth();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ const Login = () => {
     const [errorMsg, setErrorMsg] = useState('');
     const [loading, setLoading] = useState(true);
 
-    // Check token cookie on mount
+    // Check token cookie
     useEffect(() => {
         const token = getCookie('token');
         if (token) {
@@ -29,7 +29,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const { token } = await login(email, password);
+            const {token} = await login(email, password);
             setToken(token);
             document.cookie = `token=${token}; path=/; max-age=86400`;
             navigate('/problems');
@@ -42,7 +42,8 @@ const Login = () => {
     if (loading) return null; // or a spinner if you want
 
     return (
-        <div className="flex min-h-[70vh] items-start justify-center">
+        <div className="flex min-h-[70vh] items-start justify-center pt-36">
+
             <form
                 onSubmit={handleLogin}
                 className="w-full max-w-md rounded-2xl bg-gray-900 p-8 shadow-xl"
@@ -93,4 +94,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default {Login}
