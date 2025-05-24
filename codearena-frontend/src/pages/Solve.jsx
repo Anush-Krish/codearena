@@ -8,6 +8,8 @@ export default function Solve() {
     const [code, setCode] = useState('');
     const [output, setOutput] = useState('');
     const [submissionResult, setSubmissionResult] = useState(null);
+    const [userInput, setUserInput] = useState('');
+
 
     useEffect(() => {
         axiosInstance.get(`/problems/${id}`).then(res => setProblem(res.data));
@@ -15,7 +17,12 @@ export default function Solve() {
 
     const runCode = async () => {
         try {
-            const res = await axiosInstance.post('/problems/run', { code, language: 'cpp', problemId: id });
+            const res = await axiosInstance.post('/problems/run', {
+                code,
+                language: 'cpp',
+                problemId: id,
+                input: userInput
+            });
             setOutput(res.data.output);
         } catch {
             setOutput('Error running code');
@@ -33,133 +40,77 @@ export default function Solve() {
         }
     };
 
-    if (!problem) return <div>Loading...</div>;
+    if (!problem) return <div className="text-center pt-10 text-neutral-300">Loading...</div>;
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                gap: '20px',
-                padding: '20px',
-                maxWidth: '900px',
-                margin: 'auto',
-            }}
-        >
-
-            <div
-                style={{
-                    flex: '1 1 40%',
-                    border: '1px solid #ccc',
-                    padding: '15px',
-                    borderRadius: '6px',
-                    overflowY: 'auto',
-                    maxHeight: '600px',
-                }}
-            >
-                <h1 style={{ fontSize: '24px', marginBottom: '10px' }}>{problem.title}</h1>
-                <p style={{ whiteSpace: 'pre-wrap' }}>{problem.description}</p>
+        <div className="flex flex-col md:flex-row gap-6 max-w-5xl mx-auto p-5">
+            {/* Problem Description */}
+            <div className="flex-1 min-w-[300px] max-h-[600px] overflow-y-auto rounded-lg border border-gray-700 bg-gray-900 p-6 text-neutral-300">
+                <h1 className="text-2xl font-semibold mb-4">{problem.title}</h1>
+                <p className="whitespace-pre-wrap">{problem.description}</p>
 
                 {Array.isArray(problem.sampleSol) && problem.sampleSol.length > 0 && (
-                    <div style={{ marginTop: '20px' }}>
-                        <h3>Sample Input:</h3>
-                        <pre
-                            style={{
-                                backgroundColor: '#f0f0f0',
-                                padding: '10px',
-                                borderRadius: '4px',
-                                overflowX: 'auto',
-                            }}
-                        >
+                    <div className="mt-6">
+                        <h3 className="font-semibold mb-2">Sample Input:</h3>
+                        <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto">
                             {problem.sampleSol[0].Input}
                         </pre>
 
-                        <h3>Sample Output:</h3>
-                        <pre
-                            style={{
-                                backgroundColor: '#f0f0f0',
-                                padding: '10px',
-                                borderRadius: '4px',
-                                overflowX: 'auto',
-                            }}
-                        >
+                        <h3 className="font-semibold mt-4 mb-2">Sample Output:</h3>
+                        <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto">
                             {problem.sampleSol[0].Output}
                         </pre>
                     </div>
                 )}
             </div>
 
-
-            <div style={{ flex: '1 1 60%' }}>
+            {/* Code Editor & Controls */}
+            <div className="flex-1 min-w-[300px] flex flex-col">
                 <textarea
                     value={code}
                     onChange={e => setCode(e.target.value)}
                     placeholder="// Write your C++ code here"
-                    style={{
-                        width: '100%',
-                        height: '300px',
-                        fontFamily: 'monospace',
-                        fontSize: '14px',
-                        padding: '10px',
-                        borderRadius: '6px',
-                        border: '1px solid #ccc',
-                        resize: 'vertical',
-                    }}
+                    className="w-full h-72 resize-y rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-sm text-neutral-200 placeholder-gray-500 focus:outline-cyan-500 focus:ring-1 focus:ring-cyan-500"
                 />
 
-                <div style={{ marginTop: '10px' }}>
+                <div className="mt-4 flex gap-4">
                     <button
                         onClick={runCode}
-                        style={{
-                            backgroundColor: '#22c55e',
-                            color: 'white',
-                            padding: '10px 15px',
-                            borderRadius: '6px',
-                            border: 'none',
-                            marginRight: '10px',
-                            cursor: 'pointer',
-                        }}
+                        className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
                     >
                         Run
                     </button>
-
                     <button
                         onClick={submit}
-                        style={{
-                            backgroundColor: '#2563eb',
-                            color: 'white',
-                            padding: '10px 15px',
-                            borderRadius: '6px',
-                            border: 'none',
-                            cursor: 'pointer',
-                        }}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition"
                     >
                         Submit
                     </button>
                 </div>
+                <div className="mt-4">
+                    <label className="block text-sm font-medium text-neutral-300 mb-1">Custom Input</label>
+                    <textarea
+                        value={userInput}
+                        onChange={e => setUserInput(e.target.value)}
+                        placeholder="Enter custom input for your code"
+                        className="w-full h-24 resize-y rounded-lg border border-gray-700 bg-gray-900 p-3 font-mono text-sm text-neutral-200 placeholder-gray-500 focus:outline-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                    />
+                </div>
 
                 {submissionResult && (
-                    <div style={{ marginTop: '15px', fontWeight: 'bold', color: '#2563eb' }}>
+                    <div className="mt-6 font-semibold text-cyan-400">
                         Passed {submissionResult.passedCount} out of {submissionResult.totalTestCases} test cases.
                     </div>
                 )}
 
                 {output && (
-                    <pre
-                        style={{
-                            marginTop: '20px',
-                            backgroundColor: '#f9fafb',
-                            padding: '15px',
-                            borderRadius: '6px',
-                            whiteSpace: 'pre-wrap',
-                            maxHeight: '200px',
-                            overflowY: 'auto',
-                            border: '1px solid #ddd',
-                        }}
-                    >
+                    <pre className="mt-6 max-h-48 overflow-y-auto whitespace-pre-wrap rounded-lg border border-gray-700 bg-gray-800 p-4 text-neutral-200">
                         {output}
                     </pre>
                 )}
             </div>
+
+
         </div>
     );
 }
