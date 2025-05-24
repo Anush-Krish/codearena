@@ -8,6 +8,8 @@ export default function Solve() {
     const [code, setCode] = useState('');
     const [output, setOutput] = useState('');
     const [submissionResult, setSubmissionResult] = useState(null);
+    const [userInput, setUserInput] = useState('');
+
 
     useEffect(() => {
         axiosInstance.get(`/problems/${id}`).then(res => setProblem(res.data));
@@ -15,7 +17,12 @@ export default function Solve() {
 
     const runCode = async () => {
         try {
-            const res = await axiosInstance.post('/problems/run', { code, language: 'cpp', problemId: id });
+            const res = await axiosInstance.post('/problems/run', {
+                code,
+                language: 'cpp',
+                problemId: id,
+                input: userInput
+            });
             setOutput(res.data.output);
         } catch {
             setOutput('Error running code');
@@ -80,6 +87,15 @@ export default function Solve() {
                         Submit
                     </button>
                 </div>
+                <div className="mt-4">
+                    <label className="block text-sm font-medium text-neutral-300 mb-1">Custom Input</label>
+                    <textarea
+                        value={userInput}
+                        onChange={e => setUserInput(e.target.value)}
+                        placeholder="Enter custom input for your code"
+                        className="w-full h-24 resize-y rounded-lg border border-gray-700 bg-gray-900 p-3 font-mono text-sm text-neutral-200 placeholder-gray-500 focus:outline-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                    />
+                </div>
 
                 {submissionResult && (
                     <div className="mt-6 font-semibold text-cyan-400">
@@ -93,6 +109,8 @@ export default function Solve() {
                     </pre>
                 )}
             </div>
+
+
         </div>
     );
 }
