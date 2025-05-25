@@ -88,7 +88,6 @@ export default function Solve() {
                     </button>
                 </div>
                 <div className="mt-4">
-                    <label className="block text-sm font-medium text-neutral-300 mb-1">Custom Input</label>
                     <textarea
                         value={userInput}
                         onChange={e => setUserInput(e.target.value)}
