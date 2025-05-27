@@ -1,5 +1,6 @@
 const problemService = require('../services/problem.service');
 const executorService = require('../services/executor.service');
+const aiReviewService = require('../services/aiReview.service');
 
 const create = async (req, res) => {
     try {
@@ -23,7 +24,7 @@ const getAllProblem = async (req, res) => {
 const getProblem = async (req, res) => {
     try {
         const problem = await problemService.getProblemById(req.params.id);
-        if (!problem){
+        if (!problem) {
             console.error('Problem not found.');
             return res.status(404).json({message: 'Problem not found'});
         }
@@ -66,4 +67,17 @@ const submit = async (req, res) => {
     }
 };
 
-module.exports = {create, getAllProblem, getProblem, runCode, submit};
+const aiReview = async (req, res) => {
+    const {code} = req.body;
+    if (code === undefined) {
+        return res.status(404).json({success: false, error: "Empty code!"});
+    }
+    try {
+        const review = await aiReviewService.aiCodeReview(code);
+        res.json({"review": review});
+    } catch (error) {
+        res.status(500).json({error: "Error in AI review, error: " + error.message});
+    }
+};
+
+module.exports = {create, getAllProblem, getProblem, runCode, submit, aiReview};

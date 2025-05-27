@@ -12,5 +12,6 @@ router.get('/', auth, paginationParser, probController.getAllProblem)
 router.get('/:id', auth, probController.getProblem);
 router.post('/run', auth, probController.runCode);
 router.post('/submit', auth, probController.submit);
+router.post('/ai-review', auth, probController.aiReview);
 
 module.exports = router;
