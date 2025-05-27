@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-cpp": "^6.0.2",
+    "@uiw/react-codemirror": "^4.23.12",
     "axios": "^1.9.0",
     "js-cookie": "^3.0.5",
     "react": "^19.1.0",
