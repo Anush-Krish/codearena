@@ -1,6 +1,6 @@
 const problemService = require('../services/problem.service');
 const executorService = require('../services/executor.service');
-const aiReviewService = require('../services/aiReview.service');
+const aiReviewService = require('../services/aireview.service');
 
 const create = async (req, res) => {
     try {

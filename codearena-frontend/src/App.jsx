@@ -4,7 +4,7 @@ import auth from './pages/Login.jsx';
 import Problems from './pages/Problem.jsx';
 import Solve from './pages/Solve.jsx';
 import {AuthProvider} from "./context/AuthContext.jsx";
-import NavBar from "./components/NavBar.jsx";
+import NavBar from "./components/Navbar.jsx";
 
 export default function App() {
     return (
