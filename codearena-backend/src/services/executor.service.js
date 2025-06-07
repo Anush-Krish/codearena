@@ -19,15 +19,28 @@ const executeCpp = (code, input = '') => {
         fs.writeFileSync(filePath, code);
         fs.writeFileSync(inputPath, input);
 
-
         exec(`g++ ${filePath} -o ${execPath}`, (err, stdout, stderr) => {
-            if (err || stderr) return reject(stderr);
+            if (err || stderr) {
+                cleanup();
+                return reject(`Compilation Error:\n${stderr}`);
+            }
 
-            exec(`${execPath} < ${inputPath}`, (err, stdout, stderr) => {
-                if (err || stderr) return reject(stderr);
+            // Execute with timeout
+            exec(`timeout 5s ${execPath} < ${inputPath}`, (err, stdout, stderr) => {
+                cleanup();
+
+                if (err) {
+                    if (err.code === 124) {
+                        return reject('Time Limit Exceeded');
+                    }
+                    return reject(`Runtime Error:\n${stderr}`);
+                }
+
+                if (stderr) return reject(stderr);
                 resolve(stdout);
             });
         });
+
         const cleanup = () => {
             fs.remove(filePath);
             fs.remove(execPath);

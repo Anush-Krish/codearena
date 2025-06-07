@@ -27,29 +27,60 @@ export default function Solve() {
     };
 
     const runCode = async () => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 10000);
+
         try {
-            const res = await axiosInstance.post('/problems/run', {
-                code,
-                language: 'cpp',
-                problemId: id,
-                input: userInput
-            });
+            const res = await axiosInstance.post(
+                '/problems/run',
+                {
+                    code,
+                    language: 'cpp',
+                    problemId: id,
+                    input: userInput
+                },
+                { signal: controller.signal }
+            );
             setOutput(res.data.output);
-        } catch {
-            setOutput('Error running code');
+        } catch (err) {
+            if (err.name === 'CanceledError') {
+                setOutput('Error: Code execution timed out');
+            } else {
+                setOutput('Error running code');
+            }
+        } finally {
+            clearTimeout(timeout);
         }
     };
 
     const submit = async () => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 15000);
+
         try {
-            const res = await axiosInstance.post('/problems/submit', { code, language: 'cpp', problemId: id });
+            const res = await axiosInstance.post(
+                '/problems/submit',
+                {
+                    code,
+                    language: 'cpp',
+                    problemId: id
+                },
+                { signal: controller.signal }
+            );
             alert('Submission sent');
             setSubmissionResult(res.data.result);
-        } catch {
-            alert('Failed to submit');
+        } catch (err) {
+            if (err.name === 'CanceledError') {
+                alert('Error: Submission timed out');
+            } else {
+                alert('Failed to submit');
+            }
             setSubmissionResult(null);
+        } finally {
+            clearTimeout(timeout);
         }
     };
+
 
     if (!problem) return <div className="text-center pt-10 text-neutral-300">Loading...</div>;
 
