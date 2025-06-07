@@ -20,6 +20,7 @@ export default function Register() {
         e.preventDefault();
 
         try {
+            console.log('Registering with:', { firstName, lastName, email, password });
             await register({ firstName, lastName, email, password });
             navigate('/login');
         } catch (err) {
