@@ -7,5 +7,5 @@ export const login = async (email, password) => {
 
 export const register = async (userData) => {
     const res = await axiosInstance.post('/auth/register', userData);
-    return res.data;
+    return res.data.result;
 };
