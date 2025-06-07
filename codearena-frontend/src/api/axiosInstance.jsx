@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://13.60.15.110/api',//todo add ec2 public address
     headers: {
         'Content-Type': 'application/json',
     },
