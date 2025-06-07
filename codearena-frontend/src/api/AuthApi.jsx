@@ -1,4 +1,4 @@
-import axios from 'axios'; // Not axiosInstance
+import axios from 'axios';
 
 const API_BASE = 'https://anushkrish.xyz/api';
 
