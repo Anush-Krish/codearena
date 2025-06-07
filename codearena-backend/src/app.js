@@ -7,7 +7,7 @@ const userRoutes = require("./routes/auth.routes");
 const problemRoute = require("./routes/problem.route");
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://codearena-frontend.vercel.app',
     credentials: true
 }));
 
