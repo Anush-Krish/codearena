@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    const skipAuthRoutes = ['/auth/login', '/auth/register'];
+    const skipAuthRoutes = ['/auth/login', '/auth/register','/problems'];
 
     if (!skipAuthRoutes.includes(config.url)) {
         const token = Cookies.get('token');

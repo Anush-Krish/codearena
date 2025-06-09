@@ -20,7 +20,7 @@ export default function App() {
                     <Router>
                         <NavBar/>
                         <Routes>
-                            <Route path="/" element={<Navigate to="/login" replace/>}/>
+                            <Route path="/" element={<Navigate to="/problems" replace/>}/>
                             <Route path="/register" element={<Register/>}/>
                             <Route path="/login" element={<auth.Login/>}/>
                             <Route path="/problems" element={<Problems/>}/>
