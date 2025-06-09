@@ -12,6 +12,8 @@ export default function Solve() {
     const [submissionResult, setSubmissionResult] = useState(null);
     const [userInput, setUserInput] = useState('');
     const [aiReview, setAiReview] = useState('');
+    const [error, setError] = useState('');
+
 
     useEffect(() => {
         axiosInstance.get(`/problems/${id}`).then(res => setProblem(res.data));
