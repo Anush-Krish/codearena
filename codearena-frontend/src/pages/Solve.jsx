@@ -4,6 +4,7 @@ import axiosInstance from "../api/axiosInstance.jsx";
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 
 export default function Solve() {
     const { id } = useParams();
@@ -119,6 +120,12 @@ export default function Solve() {
         <div className="mt-16 flex h-screen overflow-hidden">
             {/* Left: Problem Description */}
             <div className="w-1/2 overflow-y-auto border-r border-gray-700 bg-gray-900 p-6 text-neutral-300">
+                <Link
+                    to="/problems"
+                    className="inline-block mb-4 text-sm text-cyan-400 hover:underline hover:text-cyan-300 transition"
+                >
+                    ← Back to Problems
+                </Link>
                 <h1 className="text-2xl font-semibold mb-4">{problem.title}</h1>
                 <p className="whitespace-pre-wrap">{problem.description}</p>
 
