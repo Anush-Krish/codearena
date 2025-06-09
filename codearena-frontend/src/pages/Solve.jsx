@@ -54,7 +54,7 @@ export default function Solve() {
             } else if (err.response?.data?.message?.includes('Runtime Error')) {
                 setOutput(`Runtime Error:\n${err.response.data.message}`);
             } else {
-                setOutput('Unexpected error occurred during code execution.');
+                setOutput('Time Limit Exceeded.');
             }
         } finally {
             clearTimeout(timeout);
@@ -74,7 +74,7 @@ export default function Solve() {
                 { signal: controller.signal }
             );
             setSubmissionResult(res.data.result);
-            alert(' Submission sent!');
+            alert('Submission sent!');
         } catch (err) {
             if (err.name === 'CanceledError') {
                 setError('Submission timed out. Please try again.');
