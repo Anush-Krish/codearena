@@ -1,38 +1,35 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import Problems from './pages/Problems';
-import Solve from './pages/Solve';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import Navbar from './components/Navbar';
-import { AuthProvider } from './context/AuthContext';
-
-function AppContent() {
-    const location = useLocation();
-    const hideNavbarRoutes = ['/login', '/register'];
-
-    const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
-
-    return (
-        <div className="container mx-auto">
-            {!shouldHideNavbar && <Navbar />}
-            <Routes>
-                <Route path="/" element={<Navigate to="/problems" replace />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/problems" element={<Problems />} />
-                <Route path="/solve/:id" element={<Solve />} />
-            </Routes>
-        </div>
-    );
-}
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import Register from './pages/Register.jsx';
+import auth from './pages/Login.jsx';
+import Problems from './pages/Problem.jsx';
+import Solve from './pages/Solve.jsx';
+import {AuthProvider} from "./context/AuthContext.jsx";
+import NavBar from "./components/Navbar.jsx";
 
 export default function App() {
     return (
-        <AuthProvider>
-            <Router>
-                <AppContent />
-            </Router>
-        </AuthProvider>
+
+        <div
+            className="overflow-x-hidden text-neutral-300 antialiased selection:bg-cyan-300 selection:text-cyan-900 ">
+            <div className="fixed top-0 -z-10 h-full w-full">
+                <div
+                    className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-50 bg-gradient-to-r from-black via-black to-gray-800"></div>
+            </div>
+            <div className="container mx-auto ">
+                <AuthProvider>
+                    <Router>
+                        <NavBar/>
+                        <Routes>
+                            <Route path="/" element={<Navigate to="/problems" replace/>}/>
+                            <Route path="/register" element={<Register/>}/>
+                            <Route path="/login" element={<auth.Login/>}/>
+                            <Route path="/problems" element={<Problems/>}/>
+                            <Route path="/solve/:id" element={<Solve/>}/>
+                        </Routes>
+                    </Router>
+                </AuthProvider>
+            </div>
+
+        </div>
     );
 }
