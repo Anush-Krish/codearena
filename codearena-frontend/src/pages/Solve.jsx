@@ -201,7 +201,7 @@ export default function Solve() {
                         AI Review
                     </button>
                     {!isLoggedIn && (
-                        <p className="mt-2 text-sm text-red-400">Login required to use these actions.</p>
+                        <p className="mt-2 text-sm text-red-400">SignIn required to use these actions.</p>
                     )}
 
                 </div>

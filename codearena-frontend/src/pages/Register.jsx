@@ -33,7 +33,7 @@ export default function Register() {
                 onSubmit={handleSubmit}
                 className="w-full max-w-md rounded-2xl bg-gray-900 p-8 shadow-xl"
             >
-                <h2 className="mb-6 text-center text-3xl font-bold text-white">Register</h2>
+                <h2 className="mb-6 text-center text-3xl font-bold text-white">Join CodeArena</h2>
 
                 {errorMsg && (
                     <p className="mb-4 rounded-md bg-red-600 px-4 py-2 text-sm text-white">

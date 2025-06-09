@@ -51,7 +51,7 @@ const Login = () => {
                 onSubmit={handleLogin}
                 className="w-full max-w-md rounded-2xl bg-gray-900 p-8 shadow-xl"
             >
-                <h2 className="mb-6 text-center text-3xl font-bold text-white">Login</h2>
+                <h2 className="mb-6 text-center text-3xl font-bold text-white">Log in to CodeArena</h2>
 
                 {errorMsg && <p className="mb-4 text-sm text-red-400">{errorMsg}</p>}
 
