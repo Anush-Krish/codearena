@@ -29,15 +29,18 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const {token} = await login(email, password);
+            const { token } = await login(email, password);
             setToken(token);
             document.cookie = `token=${token}; path=/; max-age=86400`;
-            navigate('/problems');
+
+           
+            window.location.href = '/problems';
         } catch (err) {
             setErrorMsg(err.response?.data?.message || 'Login failed');
             console.error('Login failed:', err);
         }
     };
+
 
     if (loading) return null; // or a spinner if you want
 
