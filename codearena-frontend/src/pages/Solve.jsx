@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axiosInstance from "../api/axiosInstance.jsx";
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
+import ReactMarkdown from 'react-markdown';
 
 export default function Solve() {
     const { id } = useParams();
@@ -27,15 +28,25 @@ export default function Solve() {
                 setAiReview('No AI review available for the provided code.');
                 return;
             }
-            
-            const formattedReview = data.review.trim().replace(/\r\n/g, '\n');
 
-            setAiReview(formattedReview);
+            const cleanedReview = data.review
+                .trim()
+                .replace(/\r\n/g, '\n') // normalize line endings
+                .replace(/[“”]/g, '"')   // replace smart quotes with standard
+                .replace(/[‘’]/g, "'");  // replace smart apostrophes
+
+            setAiReview(cleanedReview);
         } catch (error) {
             console.error('AI Review Error:', error);
             setAiReview(`Error in AI review: ${error.response?.data?.message || error.message}`);
         }
     };
+
+    {aiReview && (
+        <div className="p-4 mt-4 bg-gray-800 rounded-md text-sm leading-relaxed text-white">
+            <ReactMarkdown>{aiReview}</ReactMarkdown>
+        </div>
+    )}
 
 
     const runCode = async () => {
