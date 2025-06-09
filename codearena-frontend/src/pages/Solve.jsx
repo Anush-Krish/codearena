@@ -15,11 +15,17 @@ export default function Solve() {
     const [userInput, setUserInput] = useState('');
     const [aiReview, setAiReview] = useState('');
     const [error, setError] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
 
     useEffect(() => {
         axiosInstance.get(`/problems/${id}`).then(res => setProblem(res.data));
+
+        const tokenExists = document.cookie.split('; ').some(cookie => cookie.startsWith('token='));
+        setIsLoggedIn(tokenExists);
     }, [id]);
+
 
     const handleAiReview = async () => {
         try {
@@ -159,15 +165,42 @@ export default function Solve() {
 
                 {/* Buttons */}
                 <div className="mt-4 flex gap-4 flex-wrap">
-                    <button onClick={runCode} className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition">
+                    <button
+                        onClick={runCode}
+                        disabled={!isLoggedIn}
+                        className={`px-5 py-2 rounded-lg transition ${
+                            isLoggedIn
+                                ? 'bg-green-600 hover:bg-green-700 text-white'
+                                : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                        }`}
+                    >
                         Run
                     </button>
-                    <button onClick={submit} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
+
+                    <button
+                        onClick={submit}
+                        disabled={!isLoggedIn}
+                        className={`px-5 py-2 rounded-lg transition ${
+                            isLoggedIn
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                        }`}
+                    >
                         Submit
                     </button>
-                    <button onClick={handleAiReview} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg transition">
+
+                    <button
+                        onClick={handleAiReview}
+                        disabled={!isLoggedIn}
+                        className={`px-5 py-2 rounded-lg transition ${
+                            isLoggedIn
+                                ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                                : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                        }`}
+                    >
                         AI Review
                     </button>
+
                 </div>
 
                 {/* Custom Input */}
@@ -178,7 +211,7 @@ export default function Solve() {
                     className="w-full mt-4 h-24 resize-y rounded-lg border border-gray-700 bg-gray-900 p-3 font-mono text-sm placeholder-gray-500 focus:outline-cyan-500 focus:ring-1 focus:ring-cyan-500"
                 />
 
-                {/* Submission Result */}
+               {/* Submission Result */}
                 {submissionResult && (
                     <div className="mt-4 font-semibold text-cyan-400">
                         Passed {submissionResult.passedCount} out of {submissionResult.totalTestCases} test cases.
