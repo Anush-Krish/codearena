@@ -31,9 +31,11 @@ export default function Solve() {
 
             const cleanedReview = data.review
                 .trim()
-                .replace(/\r\n/g, '\n') // normalize line endings
-                .replace(/[“”]/g, '"')   // replace smart quotes with standard
-                .replace(/[‘’]/g, "'");  // replace smart apostrophes
+                .replace(/\r\n/g, '\n')               // normalize line endings
+                .replace(/[“”]/g, '"')                // replace smart quotes with standard
+                .replace(/[‘’]/g, "'")                // replace smart apostrophes
+                .replace(/\*\*(.*?)\*\*/g, '$1')      // remove bold (**text**)
+                .replace(/\*(.*?)\*/g, '$1');         // remove italics (*text*)
 
             setAiReview(cleanedReview);
         } catch (error) {
@@ -41,6 +43,7 @@ export default function Solve() {
             setAiReview(`Error in AI review: ${error.response?.data?.message || error.message}`);
         }
     };
+
 
     {aiReview && (
         <div className="p-4 mt-4 bg-gray-800 rounded-md text-sm leading-relaxed text-white">
