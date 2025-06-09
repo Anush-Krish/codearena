@@ -108,9 +108,17 @@ export default function Solve() {
 
             {/* Right: Code Editor, Controls, Output */}
             <div className="w-1/2 flex flex-col bg-gray-950 p-6 text-neutral-200 overflow-y-auto">
-                {/* CodeMirror Editor */}
+                {/* CodeMirror Editor for C++ */}
+                <p className="mb-2 text-sm text-neutral-400">// C++ Code Editor</p>
                 <CodeMirror
-                    value={code}
+                    value={`// C++ Hello World Program
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}`}
                     height="300px"
                     extensions={[cpp()]}
                     onChange={(value) => setCode(value)}
