@@ -32,25 +32,35 @@ export default function Solve() {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 10000);
 
-        setError(null); // reset error
         try {
             const res = await axiosInstance.post(
                 '/problems/run',
-                { code, language: 'cpp', problemId: id, input: userInput },
+                {
+                    code,
+                    language: 'cpp',
+                    problemId: id,
+                    input: userInput
+                },
                 { signal: controller.signal }
             );
             setOutput(res.data.output);
         } catch (err) {
             if (err.name === 'CanceledError') {
-                setError(' Code execution timed out. Try optimizing your code or input.');
+                setOutput('Error: Code execution timed out on the client.');
+            } else if (err.response?.data?.message?.includes('Time Limit Exceeded')) {
+                setOutput('Time Limit Exceeded: Your code took too long to run.');
+            } else if (err.response?.data?.message?.includes('Compilation Error')) {
+                setOutput(`Compilation Error:\n${err.response.data.message}`);
+            } else if (err.response?.data?.message?.includes('Runtime Error')) {
+                setOutput(`Runtime Error:\n${err.response.data.message}`);
             } else {
-                setError(' Failed to run code. Please try again.');
+                setOutput('Unexpected error occurred during code execution.');
             }
-            setOutput('');
         } finally {
             clearTimeout(timeout);
         }
     };
+
 
     const submit = async () => {
         const controller = new AbortController();
@@ -64,7 +74,7 @@ export default function Solve() {
                 { signal: controller.signal }
             );
             setSubmissionResult(res.data.result);
-            alert('✅ Submission sent!');
+            alert(' Submission sent!');
         } catch (err) {
             if (err.name === 'CanceledError') {
                 setError('Submission timed out. Please try again.');

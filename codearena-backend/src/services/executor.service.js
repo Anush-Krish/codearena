@@ -26,7 +26,7 @@ const executeCpp = (code, input = '') => {
             }
 
             // Execute with timeout
-            exec(`timeout 5s ${execPath} < ${inputPath}`, (err, stdout, stderr) => {
+            exec(`timeout 10s ${execPath} < ${inputPath}`, (err, stdout, stderr) => {
                 cleanup();
 
                 if (err) {
