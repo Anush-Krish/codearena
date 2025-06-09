@@ -50,7 +50,7 @@ const fetchAllProblems = async (pagination, query) => {
 };
 
 const getProblemById = async (id) => {
-    return await Problem.findById(id).populate('tId');
+    return await Problem.findById(id);
 };
 
 

@@ -30,24 +30,21 @@ export default function Solve() {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 10000);
 
+        setError(null); // reset error
         try {
             const res = await axiosInstance.post(
                 '/problems/run',
-                {
-                    code,
-                    language: 'cpp',
-                    problemId: id,
-                    input: userInput
-                },
+                { code, language: 'cpp', problemId: id, input: userInput },
                 { signal: controller.signal }
             );
             setOutput(res.data.output);
         } catch (err) {
             if (err.name === 'CanceledError') {
-                setOutput('Error: Code execution timed out');
+                setError(' Code execution timed out. Try optimizing your code or input.');
             } else {
-                setOutput('Error running code');
+                setError(' Failed to run code. Please try again.');
             }
+            setOutput('');
         } finally {
             clearTimeout(timeout);
         }
@@ -57,29 +54,27 @@ export default function Solve() {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 15000);
 
+        setError(null);
         try {
             const res = await axiosInstance.post(
                 '/problems/submit',
-                {
-                    code,
-                    language: 'cpp',
-                    problemId: id
-                },
+                { code, language: 'cpp', problemId: id },
                 { signal: controller.signal }
             );
-            alert('Submission sent');
             setSubmissionResult(res.data.result);
+            alert('✅ Submission sent!');
         } catch (err) {
             if (err.name === 'CanceledError') {
-                alert('Error: Submission timed out');
+                setError('Submission timed out. Please try again.');
             } else {
-                alert('Failed to submit');
+                setError('Submission failed. Check your code or try again later.');
             }
             setSubmissionResult(null);
         } finally {
             clearTimeout(timeout);
         }
     };
+
 
 
     if (!problem) return <div className="text-center pt-10 text-neutral-300">Loading...</div>;
@@ -111,7 +106,7 @@ export default function Solve() {
                 {/* CodeMirror Editor for C++ */}
                 <p className="mb-2 text-sm text-neutral-400">C++ Code Editor</p>
                 <CodeMirror
-                    value={`// C++ Editor}`}
+                    value={`//Write your C++ code here.`}
                     height="300px"
                     extensions={[cpp()]}
                     onChange={(value) => setCode(value)}
