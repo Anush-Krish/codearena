@@ -22,11 +22,21 @@ export default function Solve() {
     const handleAiReview = async () => {
         try {
             const { data } = await axiosInstance.post('problems/ai-review', { code });
-            setAiReview(data.review);
+
+            if (!data.review || typeof data.review !== 'string') {
+                setAiReview('No AI review available for the provided code.');
+                return;
+            }
+            
+            const formattedReview = data.review.trim().replace(/\r\n/g, '\n');
+
+            setAiReview(formattedReview);
         } catch (error) {
-            setAiReview('Error in AI review, error: ' + error.message);
+            console.error('AI Review Error:', error);
+            setAiReview(`Error in AI review: ${error.response?.data?.message || error.message}`);
         }
     };
+
 
     const runCode = async () => {
         const controller = new AbortController();
