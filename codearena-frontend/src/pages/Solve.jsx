@@ -167,9 +167,7 @@ export default function Solve() {
                 <div className="mt-4 flex gap-4 flex-wrap">
                     <button
                         onClick={runCode}
-                        disabled={!isLoggedIn && (
-                            <p className="mt-2 text-sm text-red-400">Login required to use these actions.</p>
-                        )}
+                        disabled={!isLoggedIn}
                         className={`px-5 py-2 rounded-lg transition ${
                             isLoggedIn
                                 ? 'bg-green-600 hover:bg-green-700 text-white'
@@ -181,9 +179,7 @@ export default function Solve() {
 
                     <button
                         onClick={submit}
-                        disabled={!isLoggedIn && (
-                            <p className="mt-2 text-sm text-red-400">Login required to use these actions.</p>
-                        )}
+                        disabled={!isLoggedIn}
                         className={`px-5 py-2 rounded-lg transition ${
                             isLoggedIn
                                 ? 'bg-blue-600 hover:bg-blue-700 text-white'
@@ -195,9 +191,7 @@ export default function Solve() {
 
                     <button
                         onClick={handleAiReview}
-                        disabled={!isLoggedIn  && (
-                            <p className="mt-2 text-sm text-red-400">Login required to use these actions.</p>
-                        )}
+                        disabled={!isLoggedIn}
                         className={`px-5 py-2 rounded-lg transition ${
                             isLoggedIn
                                 ? 'bg-purple-600 hover:bg-purple-700 text-white'
