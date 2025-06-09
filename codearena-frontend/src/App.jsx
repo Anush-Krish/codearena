@@ -18,11 +18,11 @@ export default function App() {
             <div className="container mx-auto ">
                 <AuthProvider>
                     <Router>
-                        <NavBar/>
                         <Routes>
                             <Route path="/" element={<Navigate to="/problems" replace/>}/>
                             <Route path="/register" element={<Register/>}/>
                             <Route path="/login" element={<auth.Login/>}/>
+                            <NavBar/>
                             <Route path="/problems" element={<Problems/>}/>
                             <Route path="/solve/:id" element={<Solve/>}/>
                         </Routes>

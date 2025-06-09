@@ -33,7 +33,7 @@ const Login = () => {
             setToken(token);
             document.cookie = `token=${token}; path=/; max-age=86400`;
 
-           
+
             window.location.href = '/problems';
         } catch (err) {
             setErrorMsg(err.response?.data?.message || 'Login failed');
